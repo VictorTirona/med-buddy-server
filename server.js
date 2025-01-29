@@ -3,6 +3,7 @@ const { Pool } = require('pg')
 const app = express();
 const PORT = 5000;
 require('dotenv').config();
+const supabase = require('./supabaseClient.js')
 
 app.use(express.json());
 /*
@@ -43,10 +44,14 @@ app.post('/api/v1', (req, res) => {
 
 app.get('/api/v1/records', async (req, res) => {
     try {
-        const result = await pool.query(
-            `SELECT * FROM medical_records ORDER BY start_date DESC LIMIT 5;`
-        );
 
+        const { data, error } = await supabase
+            .from('medical_records')
+            .select()
+            .limit(10);
+        if (error) throw error; // If there's an error, throw it
+
+        console.log(data); // ✅ Logs the result properly
         function getDate(dateString) {
             //converts date string to month year format
             const date = new Date(dateString);
@@ -70,7 +75,7 @@ app.get('/api/v1/records', async (req, res) => {
             return formattedText;
         }
 
-        const resultMapped = result.rows.map((perRecord) => {
+        const resultMapped = data.map((perRecord) => {
             return ({
                 ...perRecord,
                 start_date: getDate(perRecord.start_date),
@@ -79,8 +84,15 @@ app.get('/api/v1/records', async (req, res) => {
                 diagnosis: readableArray(getLabels(perRecord.diagnosis)),
                 medicine: getLabels(perRecord.medicine),
             })
-        })//insert MAP here to process jsonb data into something readable by the frontend
-        res.json(resultMapped);
+        })
+        
+        res.json(resultMapped); // Send the result back to the frontend
+        /*
+
+
+
+        
+        res.json(resultMapped);*/
 
     } catch (err) {
         console.error(err.message);
@@ -151,7 +163,7 @@ app.put('/api/v1/records', async (req, res) => {
 
 app.get('/api/v1/records/metrics/:year', async (req, res) => {
     const currentYear = req.params.year;
-    
+
     try {
         const result = await pool.query(
             `SELECT 
@@ -187,19 +199,19 @@ app.get('/api/v1/records/metrics/:year', async (req, res) => {
 Gets sick days and count of illnesses
 SELECT 
 (
-	SELECT COUNT(start_year)
-	FROM (
-		SELECT SUBSTRING(start_date FROM 1 FOR 4) AS start_year 
-		FROM medical_records
-	) AS subquery
-	WHERE start_year = '2025'
+    SELECT COUNT(start_year)
+    FROM (
+        SELECT SUBSTRING(start_date FROM 1 FOR 4) AS start_year 
+        FROM medical_records
+    ) AS subquery
+    WHERE start_year = '2025'
 ) AS count_illness,
 (
-	SELECT sum(days) 
-	FROM(
-		SELECT (end_date::date - start_date::date) AS days 
-		FROM medical_records 
-		WHERE end_date IS NOT NULL) AS subquery
+    SELECT sum(days) 
+    FROM(
+        SELECT (end_date::date - start_date::date) AS days 
+        FROM medical_records 
+        WHERE end_date IS NOT NULL) AS subquery
 ) AS days_sick
 //
 
