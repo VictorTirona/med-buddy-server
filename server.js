@@ -236,7 +236,3 @@ app.post('/api/v1/login', async (req, res) => {
         res.status(500).send('Server Error')
     }
 });*/
-
-app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`)
-})
