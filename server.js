@@ -33,20 +33,20 @@ const pool = new Pool({
     port: 5432,
 })
 
-app.get('https://med-buddy-server.vercel.app/', (req, res) => {
+app.get('/', (req, res) => {
     res.json({ message: "Welcome to Tor's Registration API" })
 })
 
-app.get('https://med-buddy-server.vercel.app/api/v1', (req, res) => {
+app.get('/api/v1', (req, res) => {
     res.json({ message: "Welcome to Tor's Registration API" })
 })
 
-app.post('https://med-buddy-server.vercel.app/api/v1', (req, res) => {
+app.post('/api/v1', (req, res) => {
     console.log(req.body)
     res.json(req.body)
 })
 
-app.get('https://med-buddy-server.vercel.app/api/v1/records', async (req, res) => {
+app.get('/api/v1/records', async (req, res) => {
     try {
 
         const { data, error } = await supabase
@@ -105,7 +105,7 @@ app.get('https://med-buddy-server.vercel.app/api/v1/records', async (req, res) =
     //
 });
 
-app.post('https://med-buddy-server.vercel.app/api/v1/records', async (req, res) => {
+app.post('/api/v1/records', async (req, res) => {
     const { symptoms, start_date, end_date, other_notes, diagnosis, medicine } = req.body;
     try {
         const result = await pool.query(
@@ -128,7 +128,7 @@ app.post('https://med-buddy-server.vercel.app/api/v1/records', async (req, res) 
     //
 });
 
-app.delete('https://med-buddy-server.vercel.app/api/v1/records', async (req, res) => {
+app.delete('/api/v1/records', async (req, res) => {
     const { id } = req.body;
     try {
         const result = await pool.query(
@@ -143,7 +143,7 @@ app.delete('https://med-buddy-server.vercel.app/api/v1/records', async (req, res
     //
 });
 
-app.put('https://med-buddy-server.vercel.app/api/v1/records', async (req, res) => {
+app.put('/api/v1/records', async (req, res) => {
     const { id, symptoms, start_date, end_date, other_notes, diagnosis, medicine } = req.body;
     try {
         const result = await pool.query(
@@ -165,7 +165,7 @@ app.put('https://med-buddy-server.vercel.app/api/v1/records', async (req, res) =
     //
 });
 
-app.get('https://med-buddy-server.vercel.app/api/v1/records/metrics/:year', async (req, res) => {
+app.get('/api/v1/records/metrics/:year', async (req, res) => {
     const currentYear = req.params.year;
 
     try {
