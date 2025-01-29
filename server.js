@@ -9,12 +9,11 @@ const supabase = require('./supabaseClient.js')
 
 
 app.use(cors({
-    origin: "https://med-buddy-alpha.vercel.app/",
+    origin: "https://med-buddy-alpha.vercel.app",
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization"
 }));
 
-app.options('*', cors());
 
 app.use(express.json());
 /*
