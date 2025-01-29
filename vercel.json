@@ -11,5 +11,11 @@
             "src": "/(.*)",
             "dest": "/server.js"
         }
+    ],
+    "rewrites": [
+        {
+            "source": "/api/v1/:path*",
+            "destination": "https://med-buddy-server.vercel.app/api/v1/:path*"
+        }
     ]
 }
