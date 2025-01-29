@@ -1,11 +1,17 @@
 const express = require('express')
 const { Pool } = require('pg')
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 require('dotenv').config();
 const supabase = require('./supabaseClient.js')
 
 app.use(express.json());
+
+app.use(cors({
+    origin: "https://med-buddy-alpha.vercel.app/",
+    methods: "GET,POST,PUT,DELETE",
+}));
 /*
 QUERIES FOR SETUP:
 
@@ -83,13 +89,13 @@ app.get('/api/v1/records', async (req, res) => {
             return ({
                 ...perRecord,
                 start_date: getDate(perRecord.start_date),
-                end_date: (perRecord.end_date!=="") && getDate(perRecord.end_date),
+                end_date: (perRecord.end_date !== "") && getDate(perRecord.end_date),
                 symptoms: readableArray(getLabels(perRecord.symptoms)),
                 diagnosis: readableArray(getLabels(perRecord.diagnosis)),
                 medicine: getLabels(perRecord.medicine),
             })
         })
-        
+
         res.json(resultMapped); // Send the result back to the frontend
         /*
 
