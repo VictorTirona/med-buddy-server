@@ -199,6 +199,7 @@ app.get('/api/v1/records/metrics/:year', async (req, res) => {
     }
 })
 
+module.exports = app;
 /*
 Gets sick days and count of illnesses
 SELECT 
