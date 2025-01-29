@@ -6,13 +6,15 @@ const PORT = process.env.PORT || 5000;
 require('dotenv').config();
 const supabase = require('./supabaseClient.js')
 
-app.use(express.json());
+
 
 app.use(cors({
     origin: "https://med-buddy-alpha.vercel.app/",
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization"
 }));
+
+app.use(express.json());
 /*
 QUERIES FOR SETUP:
 
