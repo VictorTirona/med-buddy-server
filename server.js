@@ -33,6 +33,10 @@ const pool = new Pool({
     port: 5432,
 })
 
+app.get('/', (req, res) => {
+    res.json({ message: "Welcome to Tor's Registration API" })
+})
+
 app.get('/api/v1', (req, res) => {
     res.json({ message: "Welcome to Tor's Registration API" })
 })
@@ -49,7 +53,7 @@ app.get('/api/v1/records', async (req, res) => {
             .from('medical_records')
             .select()
             .limit(10);
-        if (error) throw error; // If there's an error, throw it
+        if (error) throw error; // If there's an error, throw it.
 
         console.log(data); // ✅ Logs the result properly
         function getDate(dateString) {
