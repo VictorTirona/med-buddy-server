@@ -70,7 +70,7 @@ app.get('/api/v1/records', async (req, res) => {
         function getDate(dateString) {
             //converts date string to month year format
             const date = new Date(dateString);
-            const options = { month: "short", year: "numeric" };
+            const options = { month: "short", day: "numeric",  year: "numeric" };
             const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
             return formattedDate.toUpperCase();
         }
