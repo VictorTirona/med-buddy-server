@@ -62,6 +62,7 @@ app.get('/api/v1/records', async (req, res) => {
         const { data, error } = await supabase
             .from('medical_records')
             .select()
+            .order('start_date', {ascending: false})
             .limit(10);
         if (error) throw error; // If there's an error, throw it.
 
@@ -128,6 +129,7 @@ app.post('/api/v1/records', async (req, res) => {
                 diagnosis: `${JSON.stringify(diagnosis)}`, 
                 medicine: `${JSON.stringify(medicine)}`
             })
+            
         res.json({ status: true });
 
     } catch (err) {
