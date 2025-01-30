@@ -122,12 +122,12 @@ app.post('/api/v1/records', async (req, res) => {
         const {data, error } = await supabase
             .from('medical_records')
             .insert({
-                symptoms: `${symptoms}`,
+                symptoms: JSON.stringify(symptoms),
                 start_date: `${start_date}`, 
                 end_date: `${end_date}`, 
                 other_notes: `${other_notes}`, 
-                diagnosis: `${diagnosis}`, 
-                medicine: `${medicine}`
+                diagnosis: JSON.stringify(diagnosis), 
+                medicine: JSON.stringify(medicine)
             })
             
         res.json({ status: true });
