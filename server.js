@@ -142,9 +142,10 @@ app.post('/api/v1/records', async (req, res) => {
 app.delete('/api/v1/records', async (req, res) => {
     const { id } = req.body;
     try {
-        const result = await pool.query(
-            `DELETE FROM medical_records WHERE id=${id};`
-        );
+        const {data, error } = await supabase
+            .from('medical_records')
+            .delete()
+            .eq('id', id) 
         res.json("Delete successful");
 
     } catch (err) {
