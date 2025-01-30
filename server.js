@@ -118,17 +118,16 @@ app.get('/api/v1/records', async (req, res) => {
 app.post('/api/v1/records', async (req, res) => {
     const { symptoms, start_date, end_date, other_notes, diagnosis, medicine } = req.body;
     try {
-        const result = await pool.query(
-            `INSERT INTO medical_records(symptoms, start_date, end_date, other_notes, diagnosis, medicine)
-            VALUES (
-                '${JSON.stringify(symptoms)}',
-                '${start_date}',
-                '${end_date}',
-                '${other_notes}',
-                '${JSON.stringify(diagnosis)}',
-                '${JSON.stringify(medicine)}' 
-            );`
-        );
+        const {data, error } = await supabase
+            .from('medical_records')
+            .insert({
+                symptoms: `${JSON.stringify(symptoms)}`,
+                start_date: `${start_date}`, 
+                end_date: `${end_date}`, 
+                other_notes: `${other_notes}`, 
+                diagnosis: `${JSON.stringify(diagnosis)}`, 
+                medicine: `${JSON.stringify(medicine)}`
+            })
         res.json({ status: true });
 
     } catch (err) {
