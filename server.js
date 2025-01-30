@@ -158,16 +158,17 @@ app.delete('/api/v1/records', async (req, res) => {
 app.put('/api/v1/records', async (req, res) => {
     const { id, symptoms, start_date, end_date, other_notes, diagnosis, medicine } = req.body;
     try {
-        const result = await pool.query(
-            `UPDATE medical_records 
-            SET symptoms = '${JSON.stringify(symptoms)}',
-                start_date = '${start_date}',
-                end_date = '${end_date}',
-                other_notes = '${other_notes}',
-                diagnosis = '${JSON.stringify(diagnosis)}',
-                medicine = '${JSON.stringify(medicine)}' 
-            WHERE id=${id};`
-        )
+        const {data, error} = await supabase
+            .from('medical_records')
+            .update({
+                symptoms: symptoms,
+                start_date: `${start_date}`, 
+                end_date: `${end_date}`, 
+                other_notes: `${other_notes}`, 
+                diagnosis: diagnosis, 
+                medicine: medicine
+            })
+            .eq('id',id)
         res.json("Update successful");
 
     } catch (err) {
