@@ -186,7 +186,7 @@ app.get('/api/v1/records/metrics/:year', async (req, res) => {
 
     try {
         console.log("Getting metrics")
-        const { data, error } = await supabase.rpc('get_medical_stats', { target_year: currentYear });
+        const { data, error } = await supabase.rpc('get_medical_stats_fixed', { target_year: currentYear });
         console.log("Received metrics")
         if (error) throw error;
         /*`SELECT 
