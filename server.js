@@ -62,7 +62,7 @@ app.get('/api/v1/records', async (req, res) => {
         const { data, error } = await supabase
             .from('medical_records')
             .select()
-            .order('start_date', {ascending: false})
+            .order('start_date', { ascending: false })
             .limit(10);
         if (error) throw error; // If there's an error, throw it.
 
@@ -119,17 +119,18 @@ app.get('/api/v1/records', async (req, res) => {
 app.post('/api/v1/records', async (req, res) => {
     const { symptoms, start_date, end_date, other_notes, diagnosis, medicine } = req.body;
     try {
-        const {data, error } = await supabase
+        const { data, error } = await supabase
             .from('medical_records')
             .insert({
                 symptoms: symptoms,
-                start_date: `${start_date}`, 
-                end_date: `${end_date}`, 
-                other_notes: `${other_notes}`, 
-                diagnosis: diagnosis, 
+                start_date: `${start_date}`,
+                end_date: `${end_date}`,
+                other_notes: `${other_notes}`,
+                diagnosis: diagnosis,
                 medicine: medicine
             })
-            
+        if (error) throw error;
+
         res.json({ status: true });
 
     } catch (err) {
@@ -142,10 +143,11 @@ app.post('/api/v1/records', async (req, res) => {
 app.delete('/api/v1/records', async (req, res) => {
     const { id } = req.body;
     try {
-        const {data, error } = await supabase
+        const { data, error } = await supabase
             .from('medical_records')
             .delete()
-            .eq('id', id) 
+            .eq('id', id)
+        if (error) throw error;
         res.json("Delete successful");
 
     } catch (err) {
@@ -158,17 +160,18 @@ app.delete('/api/v1/records', async (req, res) => {
 app.put('/api/v1/records', async (req, res) => {
     const { id, symptoms, start_date, end_date, other_notes, diagnosis, medicine } = req.body;
     try {
-        const {data, error} = await supabase
+        const { data, error } = await supabase
             .from('medical_records')
             .update({
                 symptoms: symptoms,
-                start_date: `${start_date}`, 
-                end_date: `${end_date}`, 
-                other_notes: `${other_notes}`, 
-                diagnosis: diagnosis, 
+                start_date: `${start_date}`,
+                end_date: `${end_date}`,
+                other_notes: `${other_notes}`,
+                diagnosis: diagnosis,
                 medicine: medicine
             })
-            .eq('id',id)
+            .eq('id', id)
+        if (error) throw error;
         res.json("Update successful");
 
     } catch (err) {
@@ -182,8 +185,9 @@ app.get('/api/v1/records/metrics/:year', async (req, res) => {
     const currentYear = req.params.year;
 
     try {
-        const result = await pool.query(
-            `SELECT 
+        const { data, error } = await supabase.rpc('get_medical_stats', { target_year: currentYear });
+        if (error) throw error;
+        /*`SELECT 
             (
                 SELECT COUNT(start_year)
                 FROM (
@@ -201,10 +205,8 @@ app.get('/api/v1/records/metrics/:year', async (req, res) => {
                     WHERE end_date IS NOT NULL
                     AND end_date != '') AS subquery
                 WHERE start_year = '${currentYear}'
-            ) AS days_sick`
-        );
-
-        res.json(result.rows[0]);
+            ) AS days_sick`*/
+        res.json(data);
 
     } catch (err) {
         console.error(err.message);
